@@ -1,23 +1,32 @@
 // check local storage first for points, if they dont exist read this
 
 var model = {
-	places : [
+	selected_place: null,
+	places: [
 		{ name: "Vulcan Statue",
-		  latlng: { 33.4917, -86.795537} ,
+		  position: { lat: 33.4917, lng: -86.795537},
 		  wiki_link: "https://en.wikipedia.org/wiki/Vulcan_statue"
 		},
 		{ name: "Sloss Furnaces",
-		  latlng: { 33.520651, -86.791061  } ,
+		  position: { lat: 33.520651, lng: -86.791061  } ,
 		  wiki_link: "https://en.wikipedia.org/wiki/Sloss_Furnaces"
 		},
 		{ name: "McWane Science Center",
-		  latlng: { 33.514785, -86.808295} ,
+		  position: { lat: 33.514785, lng: -86.808295} ,
 		  wiki_link: "https://en.wikipedia.org/wiki/McWane_Science_Center"
 		},
 		{ name: "Railroad Park",
-		  latlng: { 33.508301, -86.811972 } ,
+		  position: { lat: 33.508301, lng: -86.811972 } ,
 		  wiki_link: "https://en.wikipedia.org/wiki/Railroad_Park"
 		},
+		{ name: "Birmingham Zoo",
+		  position: { lat: 33.486009, lng: -86.779541 } ,
+		  wiki_link: "https://en.wikipedia.org/wiki/Birmingham_Zoo"
+		},
+		{ name: "Birmingham Civil Rights Institute",
+		  position: { lat: 33.516092, lng: -86.814521 } ,
+		  wiki_link: "https://en.wikipedia.org/wiki/Birmingham_Civil_Rights_Institute"
+		}
 	]
 };
 // then save to localstorage  
