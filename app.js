@@ -1,8 +1,10 @@
 if (localStorage.map_places){
-	all_points = localStorage.map_places;
+	var all_points = JSON.parse(localStorage.map_places);
+	console.log("local storage found..reading...");
 	}
 // check local storage first for points, if they dont exist read this	
 else {
+	console.log("no local storage found..reading model data...");
 	var model = {
 		selected_place: null,
 		places: [
@@ -32,6 +34,6 @@ else {
 			}
 		]
 	};
-	localStorage.map_places = model; // save to local storage for future use
-	all_points = model;
+	localStorage.map_places = JSON.stringify(model); // save to local storage for future use
+	var all_points = model;
 }
