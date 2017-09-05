@@ -37,3 +37,9 @@ else {
 	localStorage.map_places = JSON.stringify(model); // save to local storage for future use
 	var all_points = model;
 }
+
+var view_model = function() {
+		this.place_list = ko.observableArray(all_points.places);
+	};
+
+ko.applyBindings(new view_model());
