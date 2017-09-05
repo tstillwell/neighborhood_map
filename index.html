@@ -3,15 +3,16 @@
 	<head>
 		<meta charset="utf-8">
 		<title>Map</title>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.4.3/css/foundation-float.min.css" />
 		<link rel="stylesheet" href="style.css" />
 	</head>
 	<body>
-		<div class="place-list">
+		<div class="place-list medium-2 columns">
 			<ul data-bind="foreach: place_list">
 				<li data-bind="text: name"></li>
 			</ul>
 		</div>
-		<div id="map"></div>
+		<div id="map" class="medium-10 columns"></div>
 	<script src="knockout-3.4.2.js"></script>
 	<script src="app.js"></script>
 	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDYKwwckfeEDGBfC1n_9HP2zFT2Dn27MTw&v=3&callback=initMap"></script>
