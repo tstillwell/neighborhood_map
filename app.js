@@ -43,3 +43,12 @@ var view_model = function() {
 	};
 
 ko.applyBindings(new view_model());
+
+var map;
+		
+function initMap() {
+map = new google.maps.Map(document.getElementById('map'), {
+	center: {lat: 33.517641, lng: -86.802979},
+	zoom: 15
+	});
+}
