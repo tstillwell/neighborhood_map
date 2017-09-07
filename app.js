@@ -50,17 +50,14 @@ var view_model = function() {
 			center: {lat: 33.517641, lng: -86.802979},
 			zoom: 15
 			});
-			
-		(function () {
-			for( i = 0; i < marker_array.length; i++){
-					var marker = new google.maps.Marker({
-						position : marker_array[i].position,
-						map : map,
-						title: marker_array[i].name
+		for( i = 0; i < marker_array.length; i++){
+			var marker = new google.maps.Marker({
+				position : marker_array[i].position,
+				map : map,
+				title: marker_array[i].name
 				});	
-				}
-		})();
-		}
+			}
+		};
 	};
 
 ko.applyBindings(new view_model());
