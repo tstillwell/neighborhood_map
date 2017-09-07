@@ -39,32 +39,28 @@ else {
 }
 
 
-var map;
-var marker_array = all_points.places;
-function initMap() {
-map = new google.maps.Map(document.getElementById('map'), {
-	center: {lat: 33.517641, lng: -86.802979},
-	zoom: 15
-	});
-	
-(function () {
-	for( i = 0; i < marker_array.length; i++){
-			var marker = new google.maps.Marker({
-				position : marker_array[i].position,
-				map : map,
-				title: marker_array[i].name
-		});	
-		}
-})();
-}
-
-
-
 var view_model = function() {
 		this.place_list = ko.observableArray(all_points.places); // to create item list
 		
 		// read data from models to create markers
-		
+		var map;
+		var marker_array = all_points.places;
+		window.initMap = function () { // make global so gmapsapi can use for callback
+		map = new google.maps.Map(document.getElementById('map'), {
+			center: {lat: 33.517641, lng: -86.802979},
+			zoom: 15
+			});
+			
+		(function () {
+			for( i = 0; i < marker_array.length; i++){
+					var marker = new google.maps.Marker({
+						position : marker_array[i].position,
+						map : map,
+						title: marker_array[i].name
+				});	
+				}
+		})();
+		}
 	};
 
 ko.applyBindings(new view_model());
