@@ -49,6 +49,7 @@ var view_model = {
 		marker_array : all_points.places,
 		initMap : function () {
 			console.log("adding map to page");
+			var bounds = new google.maps.LatLngBounds();
 			var gmap = new google.maps.Map(document.getElementById('map'), {
 				center: {lat: 33.517641, lng: -86.802979},
 				zoom: 15
@@ -60,7 +61,9 @@ var view_model = {
 					map: gmap,
 					title: this.marker_array[i].name
 				});
+				bounds.extend(this.marker_array[i].position);
 			}
+			gmap.fitBounds(bounds);
 		}
 	};
 
