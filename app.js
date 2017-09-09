@@ -56,6 +56,8 @@ var view_model = {
 				marker = new google.maps.Marker({
 					position : this.marker_array[i].position,
 					map: gmap,
+					animation: google.maps.Animation.DROP,
+					icon: 'http://maps.google.com/mapfiles/ms/icons/blue.png',
 					title: this.marker_array[i].name
 				});
 				bounds.extend(this.marker_array[i].position);
@@ -80,8 +82,11 @@ var view_model = {
         },
 		selectPlace : function (place, markers) { // called when clicking item in list
 			for( marker_id = 0; marker_id < markers.length; marker_id++){
+				marker = markers[marker_id];
+				marker.setIcon('http://maps.google.com/mapfiles/ms/icons/blue.png');
 				if (markers[marker_id].title == place.name){
-					this.populateInfoWindow(markers[marker_id], largeInfowindow);
+					this.populateInfoWindow(marker, largeInfowindow);
+					marker.setIcon('http://maps.google.com/mapfiles/ms/icons/blue-dot.png');
 				}
 			}	
 		}
