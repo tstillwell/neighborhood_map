@@ -9,7 +9,7 @@
 	<body>
 		<div class="place-list medium-2 columns">
 			<ul data-bind="foreach: place_list">
-				<div class="place"  data-bind="click: $parent.selectPlace"><li data-bind="text: name"></li></div>
+				<div class="place"  data-bind="click: $parent.selectPlace($data, $parent.markers)"><li data-bind="text: name"></li></div>
 			</ul>
 		</div>
 		<div id="map" class="medium-10 columns"></div>

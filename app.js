@@ -46,7 +46,7 @@ var view_model = {
 		markers: [],
 		initMap : function () {
 			console.log("adding map to page");
-			var largeInfowindow = new google.maps.InfoWindow();
+			largeInfowindow = new google.maps.InfoWindow();
 			var bounds = new google.maps.LatLngBounds();
 			var gmap = new google.maps.Map(document.getElementById('map'), {
 				center: {lat: 33.517641, lng: -86.802979},
@@ -78,8 +78,12 @@ var view_model = {
 			  });
 			}
         },
-		selectPlace : function (place) { // called when clicking item in list
-			console.log(place); // select marker on map and display infowindow
+		selectPlace : function (place, markers) { // called when clicking item in list
+			for( marker_id = 0; marker_id < markers.length; marker_id++){
+				if (markers[marker_id].title == place.name){
+					this.populateInfoWindow(markers[marker_id], largeInfowindow);
+				}
+			}	
 		}
 	};
 
