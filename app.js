@@ -41,11 +41,9 @@ else {
 
 var view_model = {
 		place_list : ko.observableArray(all_points.places), // to create item list
-		selectPlace : function (place) { // called when clicking item in list
-			console.log(place); // select marker on map and display infowindow
-		},
 		// read data from models to create markers
 		marker_array : all_points.places,
+		markers: [],
 		initMap : function () {
 			console.log("adding map to page");
 			var largeInfowindow = new google.maps.InfoWindow();
@@ -64,6 +62,7 @@ var view_model = {
 				marker.addListener('click', function() {
 					view_model.populateInfoWindow(this, largeInfowindow);
 				});
+				this.markers.push(marker);
 			}
 			gmap.fitBounds(bounds);
 		},
@@ -75,10 +74,13 @@ var view_model = {
 			  infowindow.open(map, marker);
 			  // Make sure the marker property is cleared if the infowindow is closed.
 			  infowindow.addListener('closeclick', function() {
-			  infowindow.marker = null;
-          });
-        }
-      }
+				infowindow.marker = null;
+			  });
+			}
+        },
+		selectPlace : function (place) { // called when clicking item in list
+			console.log(place); // select marker on map and display infowindow
+		}
 	};
 
 ko.applyBindings(view_model);
