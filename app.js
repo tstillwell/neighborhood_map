@@ -41,9 +41,8 @@ else {
 
 var view_model = {
 		place_list : ko.observableArray(all_points.places), // to create item list
-		
 		selectPlace : function (place) { // called when clicking item in list
-			console.log(place);
+			console.log(place); // select marker on map and display infowindow
 		},
 		// read data from models to create markers
 		marker_array : all_points.places,
@@ -55,7 +54,6 @@ var view_model = {
 				center: {lat: 33.517641, lng: -86.802979},
 				zoom: 15
 				});
-			console.log(gmap);	
 			for( i = 0; i < this.marker_array.length; i++){
 				marker = new google.maps.Marker({
 					position : this.marker_array[i].position,
