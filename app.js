@@ -49,6 +49,7 @@ var view_model = {
 		marker_array : all_points.places,
 		initMap : function () {
 			console.log("adding map to page");
+			var largeInfowindow = new google.maps.InfoWindow();
 			var bounds = new google.maps.LatLngBounds();
 			var gmap = new google.maps.Map(document.getElementById('map'), {
 				center: {lat: 33.517641, lng: -86.802979},
@@ -62,9 +63,24 @@ var view_model = {
 					title: this.marker_array[i].name
 				});
 				bounds.extend(this.marker_array[i].position);
+				marker.addListener('click', function() {
+					view_model.populateInfoWindow(this, largeInfowindow);
+				});
 			}
 			gmap.fitBounds(bounds);
-		}
+		},
+		populateInfoWindow : function (marker, infowindow) {
+			// Check to make sure the infowindow is not already opened on this marker.
+			if (infowindow.marker != marker) {
+			  infowindow.marker = marker;
+			  infowindow.setContent('<div>' + marker.title + '</div>');
+			  infowindow.open(map, marker);
+			  // Make sure the marker property is cleared if the infowindow is closed.
+			  infowindow.addListener('closeclick', function() {
+			  infowindow.marker = null;
+          });
+        }
+      }
 	};
 
 ko.applyBindings(view_model);
