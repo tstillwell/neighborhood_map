@@ -7,5 +7,22 @@ html, body {
 }
 
 .place-list {
+	padding: 0;
 	height: 100%;
+	background-color: #c2c2c2;
+	color: #FFFFF0;
+}
+
+li {
+	list-style: none;
+}
+
+ul {
+	margin: 0;
+}
+
+.place {
+	background-color: #36454F;
+	border-bottom: 1px solid #FFFFF0;
+	padding: 1.5em 2em;
 }
