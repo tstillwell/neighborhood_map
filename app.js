@@ -49,10 +49,11 @@ var view_model = {
 			var bounds = new google.maps.LatLngBounds();
 			var gmap = new google.maps.Map(document.getElementById('map'), {
 				center: {lat: 33.517641, lng: -86.802979},
-				zoom: 15
+				zoom: 15,
+				mapTypeControl: false
 				});
 			var menubtndiv = document.getElementById('menubtn');
-			var control = new MyControl(menubtndiv, gmap);
+			menubtndiv.style.margin = '1em';
 			gmap.controls[google.maps.ControlPosition.TOP_LEFT].push(menubtndiv);
 			for( i = 0; i < this.places.length; i++){
 			// create markers from places

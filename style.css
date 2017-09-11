@@ -32,3 +32,9 @@ ul {
 	border-bottom: 1px solid #FFFFF0;
 	padding: 1.5em 2em;
 }
+
+@media screen and (min-width: 40em) {
+	#menubtn {
+		display: none;
+	}
+}
