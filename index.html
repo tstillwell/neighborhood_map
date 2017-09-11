@@ -8,13 +8,27 @@
 		<link rel="stylesheet" href="style.css" />
 	</head>
 	<body>
+	<div class="off-canvas position-left reveal-for-medium" id="offCanvasLeft" data-off-canvas data-transition="overlap">
+	
+    <!-- Close button -->
+    <button class="close-button" aria-label="Close menu" type="button" data-close>
+      <span aria-hidden="true">&times;</span>
+    </button>
+	
 		<div class="place-list medium-2 columns" id="list-pane">
 			<ul data-bind="foreach: place_list">
 				<div class="place"  data-bind="click: $parent.selectPlace($data, $parent.markers)"><li data-bind="text: name"></li></div>
 			</ul>
 		</div>
-		<div id="map" class="medium-10 columns"></div>
+	</div>
+	<div class="map-wrapper off-canvas-content" data-off-canvas-content>
+		<div id="menubtn"><button type="button" class="button popover-button" data-toggle="offCanvasLeft">Open Menu</button></div>
+		<div id="map" class="medium-10 columns">
+		</div>
+	</div>
 	<script src="knockout-3.4.2.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.4.3/js/foundation.min.js"></script>
 	<script src="app.js"></script>
 	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDYKwwckfeEDGBfC1n_9HP2zFT2Dn27MTw&v=3&callback=view_model.initMap"></script>
 	</body>

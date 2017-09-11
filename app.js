@@ -51,6 +51,9 @@ var view_model = {
 				center: {lat: 33.517641, lng: -86.802979},
 				zoom: 15
 				});
+			var menubtndiv = document.getElementById('menubtn');
+			var control = new MyControl(menubtndiv, gmap);
+			gmap.controls[google.maps.ControlPosition.TOP_LEFT].push(menubtndiv);
 			for( i = 0; i < this.places.length; i++){
 			// create markers from places
 				marker = new google.maps.Marker({
@@ -109,5 +112,5 @@ var view_model = {
 			}
 		}
 	};
-//$(document).foundation();
+$(document).foundation();
 ko.applyBindings(view_model);
