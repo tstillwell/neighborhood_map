@@ -21,7 +21,7 @@
 			<div data-bind="click: filterAll">All Attractions</div>
 		</div>
 			<ul data-bind="foreach: place_list">
-				<div class="place" data-bind="click: $parent.selectPlace($data, $parent.markers), visible: $parent.isFiltered($data)" ><li data-bind="text: name"></li></div>
+				<div class="place" data-bind="click: $parent.selectPlace($data, $parent.markers)" ><li data-bind="text: name"></li></div>
 			</ul>
 		</div>
 	</div>

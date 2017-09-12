@@ -120,8 +120,10 @@ var view_model = {
 			}
 		},
 		filterFree: function() { // when user clicks "free" in dropdown
-			console.log("clicked free..");
 			this.filter_state = 'free';
+			this.place_list.remove(function(place) {
+				return (place.admission != this.view_model.filter_state);
+			});
 		},
 		filterPaid: function() {  // when user clicks "paid" in dropdown
 			console.log("clicked paid..");
@@ -130,16 +132,7 @@ var view_model = {
 		filterAll: function() { // when user clicks all" in dropdown
 			console.log("clicked all..");
 			this.filter_state = 'all';
-		},
-		isFiltered: (function(data){
-			console.log("ran isfiltered...");
-			console.log(data.admission);
-			console.log(this.filter_state);
-			if (data.admission == this.filter_state || this.filter_state == 'all'){
-				show = ko.observable(true);
-				return (show);
-			}
-		})
+		}
 	};
 $(document).foundation();
 ko.applyBindings(view_model);
