@@ -120,14 +120,14 @@ var view_model = {
 			}
 		},
 		filterFree: function() { // when user clicks "free" in dropdown
-			this.filter_state = 'free';
 			this.place_list.remove(function(place) {
-				return (place.admission != this.view_model.filter_state);
+				return (place.admission != 'free');
 			});
 		},
 		filterPaid: function() {  // when user clicks "paid" in dropdown
-			console.log("clicked paid..");
-			this.filter_state = 'paid';
+			this.place_list.remove(function(place) {
+				return (place.admission != 'paid');
+			});
 		},
 		filterAll: function() { // when user clicks all" in dropdown
 			console.log("clicked all..");
