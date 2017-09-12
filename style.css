@@ -11,6 +11,11 @@ html, body {
 	height: 100%;
 }
 
+.dropdown-pane {
+	background-color: #ccc;
+	color: #000;
+}
+
 .place-list {
 	padding: 0;
 	height: 100%;

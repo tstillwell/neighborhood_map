@@ -5,36 +5,42 @@ if (localStorage.map_places){
 // check local storage first for points, if they dont exist read this	
 else {
 	console.log("no local storage found..reading model data...");
-	var model = {
+	const model = {
 		places: [
 			{ name: "Vulcan Statue",
 			  position: { lat: 33.4917, lng: -86.795537},
-			  wiki_link: "https://en.wikipedia.org/wiki/Vulcan_statue"
+			  wiki_link: "https://en.wikipedia.org/wiki/Vulcan_statue",
+			  admission: "paid"
 			},
 			{ name: "Sloss Furnaces",
 			  position: { lat: 33.520651, lng: -86.791061  } ,
-			  wiki_link: "https://en.wikipedia.org/wiki/Sloss_Furnaces"
+			  wiki_link: "https://en.wikipedia.org/wiki/Sloss_Furnaces",
+			  admission: "free"
 			},
 			{ name: "McWane Science Center",
 			  position: { lat: 33.514785, lng: -86.808295} ,
-			  wiki_link: "https://en.wikipedia.org/wiki/McWane_Science_Center"
+			  wiki_link: "https://en.wikipedia.org/wiki/McWane_Science_Center",
+			  admission: "paid"
 			},
 			{ name: "Railroad Park",
 			  position: { lat: 33.508301, lng: -86.811972 } ,
-			  wiki_link: "https://en.wikipedia.org/wiki/Railroad_Park"
+			  wiki_link: "https://en.wikipedia.org/wiki/Railroad_Park",
+			  admission: "free"
 			},
 			{ name: "Birmingham Zoo",
 			  position: { lat: 33.486009, lng: -86.779541 } ,
-			  wiki_link: "https://en.wikipedia.org/wiki/Birmingham_Zoo"
+			  wiki_link: "https://en.wikipedia.org/wiki/Birmingham_Zoo",
+			  admission: "paid"
 			},
 			{ name: "Birmingham Civil Rights Institute",
 			  position: { lat: 33.516092, lng: -86.814521 } ,
-			  wiki_link: "https://en.wikipedia.org/wiki/Birmingham_Civil_Rights_Institute"
+			  wiki_link: "https://en.wikipedia.org/wiki/Birmingham_Civil_Rights_Institute",
+			  admission: "paid"
 			}
 		]
 	};
 	localStorage.map_places = JSON.stringify(model); // save to local storage for future use
-	var all_points = model;
+	const all_points = model;
 }
 
 
@@ -42,17 +48,18 @@ var view_model = {
 		place_list : ko.observableArray(all_points.places), // to create item list
 		// read data from models to create markers
 		places : all_points.places,
+		filter_state: 'all',
 		markers: [],
 		initMap : function () {
 			console.log("adding map to page");
 			largeInfowindow = new google.maps.InfoWindow();
-			var bounds = new google.maps.LatLngBounds();
-			var gmap = new google.maps.Map(document.getElementById('map'), {
+			let bounds = new google.maps.LatLngBounds();
+			let gmap = new google.maps.Map(document.getElementById('map'), {
 				center: {lat: 33.517641, lng: -86.802979},
 				zoom: 15,
 				mapTypeControl: false
 				});
-			var menubtndiv = document.getElementById('menubtn');
+			let menubtndiv = document.getElementById('menubtn');
 			menubtndiv.style.margin = '1em';
 			gmap.controls[google.maps.ControlPosition.TOP_LEFT].push(menubtndiv);
 			for( i = 0; i < this.places.length; i++){
@@ -86,9 +93,9 @@ var view_model = {
 			// highlight currently selected marker and un-highlight the others
 			markers.forEach(function(marker) {
 				if (marker != selectedMarker)
-					{ marker.setIcon('http://maps.google.com/mapfiles/ms/icons/blue.png');}
+					{marker.setIcon('http://maps.google.com/mapfiles/ms/icons/blue.png');}
 				if (marker == selectedMarker) 
-					{ marker.setIcon('http://maps.google.com/mapfiles/ms/icons/yellow-dot.png');}
+					{marker.setIcon('http://maps.google.com/mapfiles/ms/icons/yellow-dot.png');}
 			});
 		},
 		populateInfoWindow : function (marker, infowindow) {
@@ -111,7 +118,28 @@ var view_model = {
 					this.highlightSelected(markers, marker);
 				}
 			}
-		}
+		},
+		filterFree: function() { // when user clicks "free" in dropdown
+			console.log("clicked free..");
+			this.filter_state = 'free';
+		},
+		filterPaid: function() {  // when user clicks "paid" in dropdown
+			console.log("clicked paid..");
+			this.filter_state = 'paid';
+		},
+		filterAll: function() { // when user clicks all" in dropdown
+			console.log("clicked all..");
+			this.filter_state = 'all';
+		},
+		isFiltered: (function(data){
+			console.log("ran isfiltered...");
+			console.log(data.admission);
+			console.log(this.filter_state);
+			if (data.admission == this.filter_state || this.filter_state == 'all'){
+				show = ko.observable(true);
+				return (show);
+			}
+		})
 	};
 $(document).foundation();
 ko.applyBindings(view_model);
