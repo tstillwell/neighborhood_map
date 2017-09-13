@@ -45,11 +45,10 @@ else {
 
 
 var view_model = {
-		place_list : ko.observableArray(all_points.places), // to create item list
-		// read data from models to create markers
-		places : all_points.places,
-		filter_state: 'all',
-		markers: [],
+		places : all_points.places, // used by initmap to make markers
+		filtered_places : ko.observableArray(),
+		displayed_places : ko.observableArray(all_points.places), 
+		markers: [], // store markers in this after creation
 		initMap : function () {
 			console.log("adding map to page");
 			largeInfowindow = new google.maps.InfoWindow();
@@ -120,18 +119,27 @@ var view_model = {
 			}
 		},
 		filterFree: function() { // when user clicks "free" in dropdown
-			this.place_list.remove(function(place) {
+			for (i = 0; i < this.filtered_places.length; i++) {
+				this.displayed_places.push(this.filtered_places[i]);
+			}
+			this.filtered_places = [];
+			this.filtered_places = (this.displayed_places.remove(function(place) {
 				return (place.admission != 'free');
-			});
+			}));
+			
 		},
 		filterPaid: function() {  // when user clicks "paid" in dropdown
-			this.place_list.remove(function(place) {
+			for (i = 0; i < this.filtered_places.length; i++) {
+				this.displayed_places.push(this.filtered_places[i]);
+			}
+			this.filtered_places = [];
+			this.filtered_places = (this.displayed_places.remove(function(place) {
 				return (place.admission != 'paid');
-			});
+			}));
 		},
 		filterAll: function() { // when user clicks all" in dropdown
-			console.log("clicked all..");
-			this.filter_state = 'all';
+			this.place_list = ko.observableArray(this.places)
+			return this.place_list;
 		}
 	};
 $(document).foundation();
