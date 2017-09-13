@@ -49,11 +49,12 @@ var view_model = {
 		filtered_places : [], // stores places that are being actively filtered
 		displayed_places : ko.observableArray(all_points.places), 
 		markers: [], // store markers in this after creation
+		sidebar_title : ko.observable('All Attractions'),
 		initMap : function () {
 			console.log("adding map to page");
 			largeInfowindow = new google.maps.InfoWindow();
 			let bounds = new google.maps.LatLngBounds();
-			let gmap = new google.maps.Map(document.getElementById('map'), {
+			gmap = new google.maps.Map(document.getElementById('map'), {
 				center: {lat: 33.517641, lng: -86.802979},
 				zoom: 15,
 				mapTypeControl: false
@@ -68,7 +69,8 @@ var view_model = {
 					map: gmap,
 					animation: google.maps.Animation.DROP,
 					icon: 'http://maps.google.com/mapfiles/ms/icons/blue.png',
-					title: this.places[i].name
+					title: this.places[i].name,
+					admissionType : this.places[i].admission
 				});
 				bounds.extend(this.places[i].position);
 				marker.addListener('click', function() {
@@ -109,40 +111,55 @@ var view_model = {
 			  });
 			}
         },
-		selectPlace : function (place, markers) { // called when clicking item in list
-			for( marker_id = 0; marker_id < markers.length; marker_id++){
-				marker = markers[marker_id];
-				if (markers[marker_id].title == place.name){
+		selectPlace : function (place) { // called when clicking item in list
+			for( marker_id = 0; marker_id < this.markers.length; marker_id++){
+				marker = this.markers[marker_id];
+				if (markers[marker_id].title == place.name && markers[marker_id].map != null){
 					this.populateInfoWindow(marker, largeInfowindow);
-					this.highlightSelected(markers, marker);
+					this.highlightSelected(this.markers, marker);
 				}
 			}
 		},
-		mergeFilteredWithDisplayed : function() {
-		// combine filtered_places and displayed_places observable arrays
-		// so places that were removed from the displayed_places (by filters)
-		// can be displayed again when a new filter is selected. Then, empty
-		// the filtered_places array so a new filter can be applied
+		resetFilter : function() {
+		/* combine filtered_places and displayed_places observable arrays
+		   so places that were removed from the displayed_places (by filters)
+		   can be displayed again when a new filter is selected. Then, empty
+		   the filtered_places array so a new filter can be applied */
 			for (i = 0; i < this.filtered_places.length; i++) {
 				this.displayed_places.push(this.filtered_places[i]);
 			}
 			this.filtered_places = [];
 		},
-		filterFree: function() { // when user clicks "free" in dropdown
-			this.mergeFilteredWithDisplayed();
-			this.filtered_places = (this.displayed_places.remove(function(place) {
+		hideMarkers : function(admissionString){
+			this.markers.forEach(function(marker){ // hide filtered markers
+				marker.setMap(this.gmap);
+				if (marker.admissionType != admissionString){
+					marker.setMap(null);
+				}
+			});
+		},
+		filterFree : function() { // when user clicks "free" in dropdown
+			this.resetFilter();
+			this.filtered_places = this.displayed_places.remove(function(place) {
 				return (place.admission != 'free');
-			}));
-			
+			});
+			this.hideMarkers('free');
+			this.sidebar_title('Free Attractions');
 		},
-		filterPaid: function() {  // when user clicks "paid" in dropdown
-			this.mergeFilteredWithDisplayed();
-			this.filtered_places = (this.displayed_places.remove(function(place) {
+		filterPaid : function() {  // when user clicks "paid" in dropdown
+			this.resetFilter();
+			this.filtered_places = this.displayed_places.remove(function(place) {
 				return (place.admission != 'paid');
-			}));
+			});
+			this.hideMarkers('paid');
+			this.sidebar_title('Paid Attractions');
 		},
-		filterAll: function() { // when user clicks all" in dropdown
-			this.mergeFilteredWithDisplayed();
+		filterAll : function() { // when user clicks all" in dropdown
+			this.resetFilter();
+			this.sidebar_title('All Attractions');
+			this.markers.forEach(function(marker){ // show all markers
+				marker.setMap(this.gmap);
+			});
 		}
 	};
 $(document).foundation();

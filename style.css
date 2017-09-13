@@ -14,6 +14,7 @@ html, body {
 .dropdown-pane {
 	background-color: #ccc;
 	color: #000;
+	width: 80%;
 }
 
 .place-list {

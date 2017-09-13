@@ -13,21 +13,21 @@
     <button class="close-button" aria-label="Close menu" type="button" data-close>
       <span aria-hidden="true">&times;</span>
     </button>
-		<div class="place-list medium-2 columns" id="list-pane">
-		<h3 data-toggle="filter-places">All Attractions  &#9660;</h3>
+		<div class="place-list medium-3 columns" id="list-pane">
+			<h4  data-toggle="filter-places"><span data-bind="text: sidebar_title "></span><span>&#9660;</span></h4>
 		<div class="dropdown-pane" id="filter-places" data-dropdown>
 			<div data-bind="click: filterFree">Free Attractions</div>
 			<div data-bind="click: filterPaid">Paid Attractions</div>
 			<div data-bind="click: filterAll">All Attractions</div>
 		</div>
 			<ul data-bind="foreach: displayed_places">
-				<div class="place" data-bind="click: $parent.selectPlace($data, $parent.markers)" ><li data-bind="text: name"></li></div>
+				<div class="place" data-bind="click: $parent.selectPlace($data)" ><li data-bind="text: name"></li></div>
 			</ul>
 		</div>
 	</div>
 	<div class="map-wrapper off-canvas-content" data-off-canvas-content>
 		<div id="menubtn"><button type="button" class="button popover-button" data-toggle="offCanvasLeft">Open Menu</button></div>
-		<div id="map" class="medium-10 columns">
+		<div id="map" class="medium-9 columns">
 		</div>
 	</div>
 	<script src="knockout-3.4.2.js"></script>
