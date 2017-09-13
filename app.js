@@ -138,8 +138,10 @@ var view_model = {
 			}));
 		},
 		filterAll: function() { // when user clicks all" in dropdown
-			this.place_list = ko.observableArray(this.places)
-			return this.place_list;
+			for (i = 0; i < this.filtered_places.length; i++) {
+				this.displayed_places.push(this.filtered_places[i]);
+			}
+			this.filtered_places = [];
 		}
 	};
 $(document).foundation();
