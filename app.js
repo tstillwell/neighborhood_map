@@ -46,7 +46,7 @@ else {
 
 var view_model = {
 		places : all_points.places, // used by initmap to make markers
-		filtered_places : ko.observableArray(),
+		filtered_places : [], // stores places that are being actively filtered
 		displayed_places : ko.observableArray(all_points.places), 
 		markers: [], // store markers in this after creation
 		initMap : function () {
@@ -118,30 +118,31 @@ var view_model = {
 				}
 			}
 		},
-		filterFree: function() { // when user clicks "free" in dropdown
+		mergeFilteredWithDisplayed : function() {
+		// combine filtered_places and displayed_places observable arrays
+		// so places that were removed from the displayed_places (by filters)
+		// can be displayed again when a new filter is selected. Then, empty
+		// the filtered_places array so a new filter can be applied
 			for (i = 0; i < this.filtered_places.length; i++) {
 				this.displayed_places.push(this.filtered_places[i]);
 			}
 			this.filtered_places = [];
+		},
+		filterFree: function() { // when user clicks "free" in dropdown
+			this.mergeFilteredWithDisplayed();
 			this.filtered_places = (this.displayed_places.remove(function(place) {
 				return (place.admission != 'free');
 			}));
 			
 		},
 		filterPaid: function() {  // when user clicks "paid" in dropdown
-			for (i = 0; i < this.filtered_places.length; i++) {
-				this.displayed_places.push(this.filtered_places[i]);
-			}
-			this.filtered_places = [];
+			this.mergeFilteredWithDisplayed();
 			this.filtered_places = (this.displayed_places.remove(function(place) {
 				return (place.admission != 'paid');
 			}));
 		},
 		filterAll: function() { // when user clicks all" in dropdown
-			for (i = 0; i < this.filtered_places.length; i++) {
-				this.displayed_places.push(this.filtered_places[i]);
-			}
-			this.filtered_places = [];
+			this.mergeFilteredWithDisplayed();
 		}
 	};
 $(document).foundation();
