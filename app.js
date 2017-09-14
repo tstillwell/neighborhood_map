@@ -9,32 +9,26 @@ else {
 		places: [
 			{ name: "Vulcan Statue",
 			  position: { lat: 33.4917, lng: -86.795537},
-			  wiki_link: "https://en.wikipedia.org/wiki/Vulcan_statue",
 			  admission: "paid"
 			},
 			{ name: "Sloss Furnaces",
 			  position: { lat: 33.520651, lng: -86.791061  } ,
-			  wiki_link: "https://en.wikipedia.org/wiki/Sloss_Furnaces",
 			  admission: "free"
 			},
 			{ name: "McWane Science Center",
 			  position: { lat: 33.514785, lng: -86.808295} ,
-			  wiki_link: "https://en.wikipedia.org/wiki/McWane_Science_Center",
 			  admission: "paid"
 			},
 			{ name: "Railroad Park",
 			  position: { lat: 33.508301, lng: -86.811972 } ,
-			  wiki_link: "https://en.wikipedia.org/wiki/Railroad_Park",
 			  admission: "free"
 			},
 			{ name: "Birmingham Zoo",
 			  position: { lat: 33.486009, lng: -86.779541 } ,
-			  wiki_link: "https://en.wikipedia.org/wiki/Birmingham_Zoo",
 			  admission: "paid"
 			},
 			{ name: "Birmingham Civil Rights Institute",
 			  position: { lat: 33.516092, lng: -86.814521 } ,
-			  wiki_link: "https://en.wikipedia.org/wiki/Birmingham_Civil_Rights_Institute",
 			  admission: "paid"
 			}
 		]
