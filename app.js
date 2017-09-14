@@ -103,6 +103,9 @@ var view_model = {
 			// Check to make sure the infowindow is not already opened on this marker.
 			if (infowindow.marker != marker) {
 			  infowindow.marker = marker;
+			  console.log("creating infowindow");
+			  let wikidata = this.populateWikiData(marker.title);
+			  console.log(wikidata);
 			  infowindow.setContent('<div>' + marker.title + '</div>');
 			  infowindow.open(map, marker);
 			  // Make sure the marker property is cleared if the infowindow is closed.
@@ -160,7 +163,34 @@ var view_model = {
 			this.markers.forEach(function(marker){ // show all markers
 				marker.setMap(this.gmap);
 			});
+		},
+		populateWikiData: function(placeName) {
+			console.log("Creating wikipedia API request");
+			let wiki_api_url = 'https://en.wikipedia.org/w/api.php?';
+			wiki_api_url += $.param({
+			  'action' : 'opensearch',
+			  'search' : placeName,
+			  'limit' : 1,
+			  'format' : 'json'
+			}); // API lookup URL with URL encoded parameters
+			console.log(wiki_api_url);
+			$.ajax({
+			  url: wiki_api_url,
+			  method: 'GET',
+			  jsonp: "callback",
+			  dataType: "jsonp"
+			}).done(function(result) {
+			  console.log("success!");
+			  let text = result[2].toString();
+			  console.log(text);
+			  return text; 
+			}).fail(function(err) {
+			  console.log("In the fail method...");
+			  var text = "Wikipedia article text could not be retrieved";
+			  return text;
+			  throw err;
+			}); 
 		}
-	};
+	};		
 $(document).foundation();
 ko.applyBindings(view_model);
