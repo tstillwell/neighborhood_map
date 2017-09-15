@@ -43,7 +43,7 @@ var view_model = {
 		filtered_places : [], // stores places that are being actively filtered
 		displayed_places : ko.observableArray(all_points.places),
 		markers: [], // store markers in this after creation
-		wikitext : {}, // store wikipedia data for corresponding places
+		wikitext : {}, // stores wikipedia data for places retrieved via api
 		sidebar_title : ko.observable('All Attractions'),
 		initMap : function () {
 			console.log("adding map to page");
@@ -107,13 +107,13 @@ var view_model = {
 			}
         },
 		selectPlace : function (place) { // called when clicking item in list
-			for( marker_id = 0; marker_id < this.markers.length; marker_id++){
-				marker = this.markers[marker_id];
-				if (markers[marker_id].title == place.name && markers[marker_id].map != null){
-					this.populateInfoWindow(marker, largeInfowindow);
-					this.highlightSelected(this.markers, marker);
+			self = this;
+			self.markers.forEach(function(marker){
+				if (marker.title == place.name && marker.map != null){
+					self.populateInfoWindow(marker, largeInfowindow);
+					self.highlightSelected(markers, marker);
 				}
-			}
+			})
 		},
 		resetFilter : function() {
 		/* combine filtered_places and displayed_places observable arrays
