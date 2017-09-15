@@ -46,6 +46,7 @@ var view_model = {
 		wikitext : {}, // stores wikipedia data for places retrieved via api
 		sidebar_title : ko.observable('All Attractions'),
 		initMap : function () {
+			let self = this;
 			console.log("adding map to page");
 			largeInfowindow = new google.maps.InfoWindow();
 			let bounds = new google.maps.LatLngBounds();
@@ -57,37 +58,32 @@ var view_model = {
 			let menubtndiv = document.getElementById('menubtn');
 			menubtndiv.style.margin = '1em';
 			gmap.controls[google.maps.ControlPosition.TOP_LEFT].push(menubtndiv);
-			this.populateWikiData();
-			for( i = 0; i < this.places.length; i++){
+			self.populateWikiData();
+			self.places.forEach(function(place){
 			// create markers from places
 				marker = new google.maps.Marker({
-					position : this.places[i].position,
+					position : place.position,
 					map: gmap,
 					animation: google.maps.Animation.DROP,
 					icon: 'http://maps.google.com/mapfiles/ms/icons/blue.png',
-					title: this.places[i].name,
-					admissionType : this.places[i].admission
+					title: place.name,
+					admissionType : place.admission
 				});
-				bounds.extend(this.places[i].position);
+				bounds.extend(place.position);
 				marker.addListener('click', function() {
-					// add infowindow listeners
-					view_model.populateInfoWindow(this, largeInfowindow);
+					// marker click listeners to highlight & show infowindow
+					self.populateInfoWindow(this, largeInfowindow);
+					self.highlightSelected(this);
 				});
-				this.markers.push(marker); // populate markers array
-			}
+				self.markers.push(marker); // populate markers array
+			});
 			// once all markers are created, add highlight listeners
 			// since each highlight listener requires a list of all markers
-			for (c = 0; c < this.markers.length; c++){ 
-				marker = this.markers[c];
-				markers = this.markers;
-				marker.addListener('click', function() {
-					view_model.highlightSelected(markers, this);
-				});
-			}	
 			gmap.fitBounds(bounds);
 		},
-		highlightSelected : function (markers, selectedMarker) {
+		highlightSelected : function (selectedMarker) {
 			// highlight currently selected marker and un-highlight the others
+			markers = this.markers
 			markers.forEach(function(marker) {
 				if (marker != selectedMarker)
 					{marker.setIcon('http://maps.google.com/mapfiles/ms/icons/blue.png');}
@@ -111,7 +107,7 @@ var view_model = {
 			self.markers.forEach(function(marker){
 				if (marker.title == place.name && marker.map != null){
 					self.populateInfoWindow(marker, largeInfowindow);
-					self.highlightSelected(markers, marker);
+					self.highlightSelected(marker);
 				}
 			})
 		},
