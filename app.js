@@ -41,8 +41,9 @@ else {
 var view_model = {
 		places : all_points.places, // used by initmap to make markers
 		filtered_places : [], // stores places that are being actively filtered
-		displayed_places : ko.observableArray(all_points.places), 
+		displayed_places : ko.observableArray(all_points.places),
 		markers: [], // store markers in this after creation
+		wikitext : {}, // store wikipedia data for corresponding places
 		sidebar_title : ko.observable('All Attractions'),
 		initMap : function () {
 			console.log("adding map to page");
@@ -56,6 +57,7 @@ var view_model = {
 			let menubtndiv = document.getElementById('menubtn');
 			menubtndiv.style.margin = '1em';
 			gmap.controls[google.maps.ControlPosition.TOP_LEFT].push(menubtndiv);
+			this.populateWikiData();
 			for( i = 0; i < this.places.length; i++){
 			// create markers from places
 				marker = new google.maps.Marker({
@@ -81,7 +83,7 @@ var view_model = {
 				marker.addListener('click', function() {
 					view_model.highlightSelected(markers, this);
 				});
-			}
+			}	
 			gmap.fitBounds(bounds);
 		},
 		highlightSelected : function (markers, selectedMarker) {
@@ -97,12 +99,8 @@ var view_model = {
 			// Check to make sure the infowindow is not already opened on this marker.
 			if (infowindow.marker != marker) {
 			  infowindow.marker = marker;
-			  console.log("creating infowindow");
-			  let wikidata = this.populateWikiData(marker.title);
-			  console.log(wikidata);
-			  infowindow.setContent('<div>' + marker.title + '</div>');
+			  infowindow.setContent('<div>' + marker.title + this.wikitext[marker.title] + '</div>');
 			  infowindow.open(map, marker);
-			  // Make sure the marker property is cleared if the infowindow is closed.
 			  infowindow.addListener('closeclick', function() {
 				infowindow.marker = null;
 			  });
@@ -151,39 +149,36 @@ var view_model = {
 			this.hideMarkers('paid');
 			this.sidebar_title('Paid Attractions');
 		},
-		filterAll : function() { // when user clicks all" in dropdown
+		filterAll : function() { // when user clicks "all" in dropdown
 			this.resetFilter();
 			this.sidebar_title('All Attractions');
 			this.markers.forEach(function(marker){ // show all markers
 				marker.setMap(this.gmap);
 			});
 		},
-		populateWikiData: function(placeName) {
-			console.log("Creating wikipedia API request");
-			let wiki_api_url = 'https://en.wikipedia.org/w/api.php?';
-			wiki_api_url += $.param({
-			  'action' : 'opensearch',
-			  'search' : placeName,
-			  'limit' : 1,
-			  'format' : 'json'
-			}); // API lookup URL with URL encoded parameters
-			console.log(wiki_api_url);
-			$.ajax({
-			  url: wiki_api_url,
-			  method: 'GET',
-			  jsonp: "callback",
-			  dataType: "jsonp"
-			}).done(function(result) {
-			  console.log("success!");
-			  let text = result[2].toString();
-			  console.log(text);
-			  return text; 
-			}).fail(function(err) {
-			  console.log("In the fail method...");
-			  var text = "Wikipedia article text could not be retrieved";
-			  return text;
-			  throw err;
-			}); 
+		populateWikiData: function() {
+			wikitext = this.wikitext;
+			this.places.forEach(function(place){
+				let wiki_api_url = 'https://en.wikipedia.org/w/api.php?';
+				wiki_api_url += $.param({
+				  'action' : 'opensearch',
+				  'search' : place.name,
+				  'limit' : 1,
+				  'format' : 'json'
+				}); // API lookup URL with URL encoded parameters
+				$.ajax({
+				  url: wiki_api_url,
+				  method: 'GET',
+				  jsonp: "callback",
+				  dataType: "jsonp"
+				}).done(function(result) {
+				  let text = result[2].toString();
+				  wikitext[place.name] = text;
+				}).fail(function(err) {
+				  let text = "Wikipedia article text could not be retrieved";
+				  wikitext[place.name] = text;
+				});
+			});
 		}
 	};		
 $(document).foundation();
