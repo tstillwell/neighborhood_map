@@ -46,14 +46,28 @@ var view_model = {
 		wikitext : {}, // stores wikipedia data for places retrieved via api
 		sidebar_title : ko.observable('All Attractions'),
 		initMap : function () {
+			/* Initilizes the google map and all markers. Sets up markers and
+			   infowindow behavior inside the map pane.
+			   Used as a callback from Google Maps
+			   API query in index.html */
 			let self = this;
 			console.log("adding map to page");
-			largeInfowindow = new google.maps.InfoWindow();
+			largeInfowindow = new google.maps.InfoWindow({
+				maxWidth: 150
+			});
 			let bounds = new google.maps.LatLngBounds();
 			gmap = new google.maps.Map(document.getElementById('map'), {
 				center: {lat: 33.517641, lng: -86.802979},
 				zoom: 15,
-				mapTypeControl: false
+				mapTypeControl: false,
+				styles: [ { "featureType": "poi",
+							"stylers": [{"visibility": "off"}]
+						  },
+						  { "featureType": "road",
+							"elementType": "geometry.fill",
+							"stylers": [{"color": "#c2c2c2"}]
+						  }
+						]  
 				});
 			let menubtndiv = document.getElementById('menubtn');
 			menubtndiv.style.margin = '1em';
@@ -77,17 +91,15 @@ var view_model = {
 				});
 				self.markers.push(marker); // populate markers array
 			});
-			// once all markers are created, add highlight listeners
-			// since each highlight listener requires a list of all markers
-			gmap.fitBounds(bounds);
+			gmap.fitBounds(bounds); // ensure map holds all markers
 		},
 		highlightSelected : function (selectedMarker) {
 			// highlight currently selected marker and un-highlight the others
 			markers = this.markers
 			markers.forEach(function(marker) {
-				if (marker != selectedMarker)
+				if (marker != selectedMarker) // deselected icons
 					{marker.setIcon('http://maps.google.com/mapfiles/ms/icons/blue.png');}
-				if (marker == selectedMarker) 
+				if (marker == selectedMarker) // highlighted/selected icon 
 					{marker.setIcon('http://maps.google.com/mapfiles/ms/icons/yellow-dot.png');}
 			});
 		},
@@ -95,7 +107,9 @@ var view_model = {
 			// Check to make sure the infowindow is not already opened on this marker.
 			if (infowindow.marker != marker) {
 			  infowindow.marker = marker;
-			  infowindow.setContent('<div>' + marker.title + this.wikitext[marker.title] + '</div>');
+			  title = '<div class="title">' + marker.title + '</div>';
+			  text = '<div class="desc">' + this.wikitext[marker.title] + '</div>';
+			  infowindow.setContent( title + text );
 			  infowindow.open(map, marker);
 			  infowindow.addListener('closeclick', function() {
 				infowindow.marker = null;
@@ -152,7 +166,7 @@ var view_model = {
 				marker.setMap(this.gmap);
 			});
 		},
-		populateWikiData: function() {
+		populateWikiData: function() { // retrieve wikipedia text via API
 			wikitext = this.wikitext;
 			this.places.forEach(function(place){
 				let wiki_api_url = 'https://en.wikipedia.org/w/api.php?';

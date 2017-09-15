@@ -39,6 +39,12 @@ ul {
 	padding: 1.5em 2em;
 }
 
+.title {
+	font-size: 1.75em;
+	margin-bottom: 1em;
+	border-bottom: 1px solid #000;
+}
+
 @media screen and (min-width: 40em) {
 	#menubtn {
 		display: none;
