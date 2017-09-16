@@ -14,13 +14,13 @@
       <span aria-hidden="true">&times;</span>
     </button>
 		<div class="place-list medium-3 columns" id="list-pane">
-			<h4  data-toggle="filter-places"><span data-bind="text: sidebar_title "></span><span>&#9660;</span></h4>
+			<h4  data-toggle="filter-places"><span data-bind="text: sidebarTitle "></span><span>&#9660;</span></h4>
 		<div class="dropdown-pane" id="filter-places" data-dropdown data-close-on-click="true">
 			<div data-bind="click: filterFree">Free Attractions</div>
 			<div data-bind="click: filterPaid">Paid Attractions</div>
 			<div data-bind="click: filterAll">All Attractions</div>
 		</div>
-			<ul data-bind="foreach: displayed_places">
+			<ul data-bind="foreach: displayedPlaces">
 				<div class="place" data-bind="click: $parent.selectPlace($data)" ><li data-bind="text: name"></li></div>
 			</ul>
 		</div>
@@ -34,6 +34,6 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.4.3/js/foundation.min.js"></script>
 	<script src="app.js"></script>
-	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDYKwwckfeEDGBfC1n_9HP2zFT2Dn27MTw&v=3&callback=view_model.initMap"></script>
+	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDYKwwckfeEDGBfC1n_9HP2zFT2Dn27MTw&v=3&callback=viewModel.initMap"></script>
 	</body>
 </html>

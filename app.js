@@ -1,5 +1,5 @@
-if (localStorage.map_places){
-	var all_points = JSON.parse(localStorage.map_places);
+if (localStorage.mapPlaces){
+	var allPoints = JSON.parse(localStorage.mapPlaces);
 	console.log("local storage found..reading...");
 	}
 // check local storage first for points, if they dont exist read this	
@@ -33,18 +33,18 @@ else {
 			}
 		]
 	};
-	localStorage.map_places = JSON.stringify(model); // save to local storage for future use
-	const all_points = model;
+	localStorage.mapPlaces = JSON.stringify(model); // save to local storage for future use
+	const allPoints = model;
 }
 
 
-var view_model = {
-		places : all_points.places, // used by initmap to make markers
-		filtered_places : [], // stores places that are being actively filtered
-		displayed_places : ko.observableArray(all_points.places),
+var viewModel = {
+		places : allPoints.places, // used by initmap to make markers
+		filteredPlaces : [], // stores places that are being actively filtered
+		displayedPlaces : ko.observableArray(allPoints.places),
 		markers: [], // store markers in this after creation
 		wikitext : {}, // stores wikipedia data for places retrieved via api
-		sidebar_title : ko.observable('All Attractions'),
+		sidebarTitle : ko.observable('All Attractions'),
 		initMap : function () {
 			/* Initilizes the google map and all markers. Sets up markers and
 			   infowindow behavior inside the map pane.
@@ -67,7 +67,7 @@ var view_model = {
 							"elementType": "geometry.fill",
 							"stylers": [{"color": "#c2c2c2"}]
 						  }
-						]  
+						]
 				});
 			let menubtndiv = document.getElementById('menubtn');
 			menubtndiv.style.margin = '1em';
@@ -126,14 +126,14 @@ var view_model = {
 			})
 		},
 		resetFilter : function() {
-		/* combine filtered_places and displayed_places observable arrays
-		   so places that were removed from the displayed_places (by filters)
+		/* combine filteredPlaces and displayedPlaces observable arrays
+		   so places that were removed from the displayedPlaces (by filters)
 		   can be displayed again when a new filter is selected. Then, empty
-		   the filtered_places array so a new filter can be applied */
-			for (i = 0; i < this.filtered_places.length; i++) {
-				this.displayed_places.push(this.filtered_places[i]);
+		   the filteredPlaces array so a new filter can be applied */
+			for (i = 0; i < this.filteredPlaces.length; i++) {
+				this.displayedPlaces.push(this.filteredPlaces[i]);
 			}
-			this.filtered_places = [];
+			this.filteredPlaces = [];
 		},
 		hideMarkers : function(admissionString){
 			this.markers.forEach(function(marker){ // hide filtered markers
@@ -145,23 +145,23 @@ var view_model = {
 		},
 		filterFree : function() { // when user clicks "free" in dropdown
 			this.resetFilter();
-			this.filtered_places = this.displayed_places.remove(function(place) {
+			this.filteredPlaces = this.displayedPlaces.remove(function(place) {
 				return (place.admission != 'free');
 			});
 			this.hideMarkers('free');
-			this.sidebar_title('Free Attractions');
+			this.sidebarTitle('Free Attractions');
 		},
 		filterPaid : function() {  // when user clicks "paid" in dropdown
 			this.resetFilter();
-			this.filtered_places = this.displayed_places.remove(function(place) {
+			this.filteredPlaces = this.displayedPlaces.remove(function(place) {
 				return (place.admission != 'paid');
 			});
 			this.hideMarkers('paid');
-			this.sidebar_title('Paid Attractions');
+			this.sidebarTitle('Paid Attractions');
 		},
 		filterAll : function() { // when user clicks "all" in dropdown
 			this.resetFilter();
-			this.sidebar_title('All Attractions');
+			this.sidebarTitle('All Attractions');
 			this.markers.forEach(function(marker){ // show all markers
 				marker.setMap(this.gmap);
 			});
@@ -169,15 +169,15 @@ var view_model = {
 		populateWikiData: function() { // retrieve wikipedia text via API
 			wikitext = this.wikitext;
 			this.places.forEach(function(place){
-				let wiki_api_url = 'https://en.wikipedia.org/w/api.php?';
-				wiki_api_url += $.param({
+				let wikiAPIrequest = 'https://en.wikipedia.org/w/api.php?';
+				wikiAPIrequest += $.param({
 				  'action' : 'opensearch',
 				  'search' : place.name,
 				  'limit' : 1,
 				  'format' : 'json'
 				}); // API lookup URL with URL encoded parameters
 				$.ajax({
-				  url: wiki_api_url,
+				  url: wikiAPIrequest,
 				  method: 'GET',
 				  jsonp: "callback",
 				  dataType: "jsonp"
@@ -192,4 +192,4 @@ var view_model = {
 		}
 	};		
 $(document).foundation();
-ko.applyBindings(view_model);
+ko.applyBindings(viewModel);
