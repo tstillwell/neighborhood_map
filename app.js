@@ -109,6 +109,7 @@ var viewModel = {
 			  infowindow.marker = marker;
 			  title = '<div class="title">' + marker.title + '</div>';
 			  text = '<div class="desc">' + this.wikitext[marker.title] + '</div>';
+			  text += "<a>More From Wikipedia</a>"
 			  infowindow.setContent( title + text );
 			  infowindow.open(map, marker);
 			  infowindow.addListener('closeclick', function() {
