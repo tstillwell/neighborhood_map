@@ -2,7 +2,7 @@ if (localStorage.mapPlaces){
 	var allPoints = JSON.parse(localStorage.mapPlaces);
 	console.log("local storage found..reading...");
 	}
-// check local storage first for points, if they dont exist read this	
+// check local storage first for points, if they dont exist read this
 else {
 	console.log("no local storage found..reading model data...");
 	const model = {
@@ -33,7 +33,8 @@ else {
 			}
 		]
 	};
-	localStorage.mapPlaces = JSON.stringify(model); // save to local storage for future use
+	// save to local storage for future use
+	localStorage.mapPlaces = JSON.stringify(model);
 	const allPoints = model;
 }
 
@@ -108,8 +109,8 @@ var viewModel = {
 			if (infowindow.marker != marker) {
 			  infowindow.marker = marker;
 			  title = '<div class="title">' + marker.title + '</div>';
-			  text = '<div class="desc">' + this.wikitext[marker.title] + '</div>';
-			  text += "<a>More From Wikipedia</a>"
+			  text = '<div class="desc">' + this.wikitext[marker.title][2] + '</div>';
+			  text += "<a href=" + this.wikitext[marker.title][3] + ">More From Wikipedia</a>"
 			  infowindow.setContent( title + text );
 			  infowindow.open(map, marker);
 			  infowindow.addListener('closeclick', function() {
@@ -183,14 +184,13 @@ var viewModel = {
 				  jsonp: "callback",
 				  dataType: "jsonp"
 				}).done(function(result) {
-				  let text = result[2].toString();
-				  wikitext[place.name] = text;
+				  wikitext[place.name] = result;
 				}).fail(function(err) {
 				  let text = "Wikipedia article text could not be retrieved";
 				  wikitext[place.name] = text;
 				});
 			});
 		}
-	};		
+	};
 $(document).foundation();
 ko.applyBindings(viewModel);
