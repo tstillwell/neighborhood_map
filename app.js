@@ -61,15 +61,15 @@ var viewModel = {
 				center: {lat: 33.517641, lng: -86.802979},
 				zoom: 15,
 				mapTypeControl: false,
-				styles: [ { "featureType": "poi",
-							"stylers": [{"visibility": "off"}]
-						  },
-						  { "featureType": "road",
-							"elementType": "geometry.fill",
-							"stylers": [{"color": "#c2c2c2"}]
-						  }
-						]
-				});
+				styles: 
+				[{ "featureType": "poi",
+				"stylers": [{"visibility": "off"}]
+				},
+				{ "featureType": "road",
+				"elementType": "geometry.fill",
+				"stylers": [{"color": "#c2c2c2"}]
+				}]
+			});
 			let menubtndiv = document.getElementById('menubtn');
 			menubtndiv.style.margin = '1em';
 			gmap.controls[google.maps.ControlPosition.TOP_LEFT].push(menubtndiv);
