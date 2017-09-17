@@ -20,8 +20,8 @@ html, body {
 .place-list {
 	padding: 0;
 	height: 100%;
-	background-color: #c2c2c2;
-	color: #FFFFF0;
+	background-color: #424242;
+	color: #d8d8d8;
 	width: 100%;
 }
 
@@ -36,7 +36,7 @@ ul {
 .place {
 	background-color: #36454F;
 	border-bottom: 1px solid #FFFFF0;
-	padding: 1.5em 2em;
+	padding: 1.25em 2em;
 }
 
 .title {
