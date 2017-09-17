@@ -77,7 +77,7 @@ var viewModel = {
 					position : place.position,
 					map: gmap,
 					animation: google.maps.Animation.DROP,
-					icon: 'http://maps.google.com/mapfiles/ms/icons/blue.png',
+					icon: 'https://maps.google.com/mapfiles/ms/icons/blue.png',
 					title: place.name,
 					admissionType : place.admission
 				});
@@ -105,12 +105,12 @@ var viewModel = {
 			});
 		},
 		populateInfoWindow : function (marker, infowindow) {
-			// Check to make sure the infowindow is not already opened on this marker.
+			// Put data loaded from wikipedia into infowindow on map
 			if (infowindow.marker != marker) {
 			  infowindow.marker = marker;
 			  title = '<div class="title">' + marker.title + '</div>';
-			  text = '<div class="desc">' + this.wikitext[marker.title.text] + '</div>';
-			  text += '<a href="' + this.wikitext[marker.title.link] + '">More From Wikipedia</a>';
+			  text = '<div class="desc">' + this.wikitext[marker.title].text + '</div>';
+			  text += '<a href="' + this.wikitext[marker.title].link + '">More From Wikipedia</a>';
 			  infowindow.setContent( title + text );
 			  infowindow.open(map, marker);
 			  infowindow.addListener('closeclick', function() {
@@ -142,7 +142,7 @@ var viewModel = {
 			this.markers.forEach(function(marker){ // hide filtered markers
 				marker.setMap(this.gmap);
 				if (marker.admissionType != admissionString){
-					marker.setMap(null);
+					marker.setMap(null); // marker still exists
 				}
 			});
 		},
@@ -187,16 +187,15 @@ var viewModel = {
 				}).done(function(result) {
 				  let text = result[2];
 				  let link = result[3];
-				  wikitext[place.name.text] = text;
-				  wikitext[place.name.link] = link;
+				  wikitext[place.name] = {text,link}
 				}).fail(function(err) {
 				  let error = 'Wikipedia article text could not be retrieved';
-				  wikitext[place.name.text] = error;
-				  wikitext[place.name.link] = '#';
+				  let link = '#';
+				  wikitext[place.name] = {text,link}
 				  throw(err);
 				});
 			});
 		}
 	};
-$(document).foundation();
-ko.applyBindings(viewModel);
+$(document).foundation(); // initilize foundation javascript plugins
+ko.applyBindings(viewModel); // connect knockout bindings in html to viewModel
