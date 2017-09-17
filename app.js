@@ -70,7 +70,6 @@ var viewModel = {
 			let menubtndiv = document.getElementById('menubtn');
 			menubtndiv.style.margin = '1em';
 			gmap.controls[google.maps.ControlPosition.TOP_LEFT].push(menubtndiv);
-			self.populateWikiData();
 			self.places.forEach(function(place){
 			// create markers from places
 				marker = new google.maps.Marker({
@@ -90,6 +89,7 @@ var viewModel = {
 				self.markers.push(marker); // populate markers array
 			});
 			gmap.fitBounds(bounds); // ensure map holds all markers
+			self.populateWikiData(); // now map is finished, get wiki data
 		},
 		mapError : function () { // if maps API request fails, notify user
 			$('#map').html("Google Maps failed to load");
@@ -187,11 +187,11 @@ var viewModel = {
 				}).done(function(result) {
 				  let text = result[2];
 				  let link = result[3];
-				  wikitext[place.name] = {text,link}
+				  wikitext[place.name] = {text,link};
 				}).fail(function(err) {
 				  let error = 'Wikipedia article text could not be retrieved';
 				  let link = '#';
-				  wikitext[place.name] = {text,link}
+				  wikitext[place.name] = {text,link};
 				  throw(err);
 				});
 			});
