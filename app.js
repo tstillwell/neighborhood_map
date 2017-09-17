@@ -1,58 +1,55 @@
 if (localStorage.mapPlaces){
 	var allPoints = JSON.parse(localStorage.mapPlaces);
-	console.log("local storage found..reading...");
-	}
+}
 // check local storage first for points, if they dont exist read this
 else {
-	console.log("no local storage found..reading model data...");
 	const model = {
 		places: [
-			{ name: "Vulcan Statue",
+			{ name: 'Vulcan Statue',
 			  position: { lat: 33.4917, lng: -86.795537},
-			  admission: "paid"
+			  admission: 'paid'
 			},
-			{ name: "Sloss Furnaces",
+			{ name: 'Sloss Furnaces',
 			  position: { lat: 33.520651, lng: -86.791061  } ,
-			  admission: "free"
+			  admission: 'free'
 			},
-			{ name: "McWane Science Center",
+			{ name: 'McWane Science Center',
 			  position: { lat: 33.514785, lng: -86.808295} ,
-			  admission: "paid"
+			  admission: 'paid'
 			},
-			{ name: "Railroad Park",
+			{ name: 'Railroad Park',
 			  position: { lat: 33.508301, lng: -86.811972 } ,
-			  admission: "free"
+			  admission: 'free'
 			},
-			{ name: "Birmingham Zoo",
+			{ name: 'Birmingham Zoo',
 			  position: { lat: 33.486009, lng: -86.779541 } ,
-			  admission: "paid"
+			  admission: 'paid'
 			},
-			{ name: "Birmingham Civil Rights Institute",
+			{ name: 'Birmingham Civil Rights Institute',
 			  position: { lat: 33.516092, lng: -86.814521 } ,
-			  admission: "paid"
+			  admission: 'paid'
 			}
 		]
 	};
 	// save to local storage for future use
 	localStorage.mapPlaces = JSON.stringify(model);
-	const allPoints = model;
+	var allPoints = model;
 }
 
 
 var viewModel = {
 		places : allPoints.places, // used by initmap to make markers
 		filteredPlaces : [], // stores places that are being actively filtered
-		displayedPlaces : ko.observableArray(allPoints.places),
+		displayedPlaces : ko.observableArray(allPoints.places), // for list
 		markers: [], // store markers in this after creation
 		wikitext : {}, // stores wikipedia data for places retrieved via api
-		sidebarTitle : ko.observable('All Attractions'),
+		sidebarTitle : ko.observable('All Attractions'), // dropdown name
 		initMap : function () {
 			/* Initilizes the google map and all markers. Sets up markers and
 			   infowindow behavior inside the map pane.
 			   Used as a callback from Google Maps
 			   API query in index.html */
 			let self = this;
-			console.log("adding map to page");
 			largeInfowindow = new google.maps.InfoWindow({
 				maxWidth: 150
 			});
@@ -62,12 +59,12 @@ var viewModel = {
 				zoom: 15,
 				mapTypeControl: false,
 				styles: 
-				[{ "featureType": "poi",
-				"stylers": [{"visibility": "off"}]
+				[{ 'featureType': 'poi',
+				'stylers': [{'visibility': 'off'}]
 				},
-				{ "featureType": "road",
-				"elementType": "geometry.fill",
-				"stylers": [{"color": "#c2c2c2"}]
+				{ 'featureType': 'road',
+				'elementType': 'geometry.fill',
+				'stylers': [{'color': '#c2c2c2'}]
 				}]
 			});
 			let menubtndiv = document.getElementById('menubtn');
@@ -94,6 +91,9 @@ var viewModel = {
 			});
 			gmap.fitBounds(bounds); // ensure map holds all markers
 		},
+		mapError : function () { // if maps API request fails, notify user
+			$('#map').html("Google Maps failed to load");
+		},	
 		highlightSelected : function (selectedMarker) {
 			// highlight currently selected marker and un-highlight the others
 			markers = this.markers
@@ -109,8 +109,8 @@ var viewModel = {
 			if (infowindow.marker != marker) {
 			  infowindow.marker = marker;
 			  title = '<div class="title">' + marker.title + '</div>';
-			  text = '<div class="desc">' + this.wikitext[marker.title][2] + '</div>';
-			  text += "<a href=" + this.wikitext[marker.title][3] + ">More From Wikipedia</a>"
+			  text = '<div class="desc">' + this.wikitext[marker.title.text] + '</div>';
+			  text += '<a href="' + this.wikitext[marker.title.link] + '">More From Wikipedia</a>';
 			  infowindow.setContent( title + text );
 			  infowindow.open(map, marker);
 			  infowindow.addListener('closeclick', function() {
@@ -122,6 +122,7 @@ var viewModel = {
 			self = this;
 			self.markers.forEach(function(marker){
 				if (marker.title == place.name && marker.map != null){
+					marker.map.panTo(marker.position);
 					self.populateInfoWindow(marker, largeInfowindow);
 					self.highlightSelected(marker);
 				}
@@ -145,7 +146,7 @@ var viewModel = {
 				}
 			});
 		},
-		filterFree : function() { // when user clicks "free" in dropdown
+		filterFree : function() { // when user clicks 'free' in dropdown
 			this.resetFilter();
 			this.filteredPlaces = this.displayedPlaces.remove(function(place) {
 				return (place.admission != 'free');
@@ -153,7 +154,7 @@ var viewModel = {
 			this.hideMarkers('free');
 			this.sidebarTitle('Free Attractions');
 		},
-		filterPaid : function() {  // when user clicks "paid" in dropdown
+		filterPaid : function() {  // when user clicks 'paid' in dropdown
 			this.resetFilter();
 			this.filteredPlaces = this.displayedPlaces.remove(function(place) {
 				return (place.admission != 'paid');
@@ -161,7 +162,7 @@ var viewModel = {
 			this.hideMarkers('paid');
 			this.sidebarTitle('Paid Attractions');
 		},
-		filterAll : function() { // when user clicks "all" in dropdown
+		filterAll : function() { // when user clicks 'all' in dropdown
 			this.resetFilter();
 			this.sidebarTitle('All Attractions');
 			this.markers.forEach(function(marker){ // show all markers
@@ -181,13 +182,18 @@ var viewModel = {
 				$.ajax({
 				  url: wikiAPIrequest,
 				  method: 'GET',
-				  jsonp: "callback",
-				  dataType: "jsonp"
+				  jsonp: 'callback',
+				  dataType: 'jsonp'
 				}).done(function(result) {
-				  wikitext[place.name] = result;
+				  let text = result[2];
+				  let link = result[3];
+				  wikitext[place.name.text] = text;
+				  wikitext[place.name.link] = link;
 				}).fail(function(err) {
-				  let text = "Wikipedia article text could not be retrieved";
-				  wikitext[place.name] = text;
+				  let error = 'Wikipedia article text could not be retrieved';
+				  wikitext[place.name.text] = error;
+				  wikitext[place.name.link] = '#';
+				  throw(err);
 				});
 			});
 		}
