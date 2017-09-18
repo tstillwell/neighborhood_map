@@ -4,31 +4,31 @@ if (localStorage.mapPlaces){
 // check local storage first for points, if they dont exist read this
 else {
 	const model = {
-		places: [
-			{ name: 'Vulcan Statue',
-			  position: { lat: 33.4917, lng: -86.795537},
-			  admission: 'paid'
-			},
-			{ name: 'Sloss Furnaces',
-			  position: { lat: 33.520651, lng: -86.791061  } ,
-			  admission: 'free'
-			},
-			{ name: 'McWane Science Center',
-			  position: { lat: 33.514785, lng: -86.808295} ,
-			  admission: 'paid'
-			},
-			{ name: 'Railroad Park',
-			  position: { lat: 33.508301, lng: -86.811972 } ,
-			  admission: 'free'
-			},
-			{ name: 'Birmingham Zoo',
-			  position: { lat: 33.486009, lng: -86.779541 } ,
-			  admission: 'paid'
-			},
-			{ name: 'Birmingham Civil Rights Institute',
-			  position: { lat: 33.516092, lng: -86.814521 } ,
-			  admission: 'paid'
-			}
+	places: [
+		{ name: 'Vulcan Statue',
+		  position: { lat: 33.4917, lng: -86.795537},
+		  admission: 'paid'
+		},
+		{ name: 'Sloss Furnaces',
+		  position: { lat: 33.520651, lng: -86.791061  } ,
+		  admission: 'free'
+		},
+		{ name: 'McWane Science Center',
+		  position: { lat: 33.514785, lng: -86.808295} ,
+		  admission: 'paid'
+		},
+		{ name: 'Railroad Park',
+		  position: { lat: 33.508301, lng: -86.811972 } ,
+		  admission: 'free'
+		},
+		{ name: 'Birmingham Zoo',
+		  position: { lat: 33.486009, lng: -86.779541 } ,
+		  admission: 'paid'
+		},
+		{ name: 'Birmingham Civil Rights Institute',
+		  position: { lat: 33.516092, lng: -86.814521 } ,
+		  admission: 'paid'
+		}
 		]
 	};
 	// save to local storage for future use
@@ -96,7 +96,7 @@ var viewModel = {
 		},	
 		highlightSelected : function (selectedMarker) {
 			// highlight currently selected marker and un-highlight the others
-			markers = this.markers
+			markers = this.markers;
 			markers.forEach(function(marker) {
 				if (marker != selectedMarker) // deselected icons
 					{marker.setIcon('http://maps.google.com/mapfiles/ms/icons/blue.png');}
@@ -121,19 +121,19 @@ var viewModel = {
 		selectPlace : function (place) { // called when clicking item in list
 			self = this;
 			self.markers.forEach(function(marker){
-				if (marker.title == place.name && marker.map != null){
+				if (marker.title == place.name && marker.map !== null){
 					marker.map.panTo(marker.position);
 					self.populateInfoWindow(marker, largeInfowindow);
 					self.highlightSelected(marker);
 				}
-			})
+			});
 		},
 		resetFilter : function() {
 		/* combine filteredPlaces and displayedPlaces observable arrays
 		   so places that were removed from the displayedPlaces (by filters)
 		   can be displayed again when a new filter is selected. Then, empty
 		   the filteredPlaces array so a new filter can be applied */
-			for (i = 0; i < this.filteredPlaces.length; i++) {
+			for (var i = 0; i < this.filteredPlaces.length; i++) {
 				this.displayedPlaces.push(this.filteredPlaces[i]);
 			}
 			this.filteredPlaces = [];
@@ -185,14 +185,16 @@ var viewModel = {
 				  jsonp: 'callback',
 				  dataType: 'jsonp'
 				}).done(function(result) {
-				  let text = result[2];
-				  let link = result[3];
+				  let text = result[2] || 'Wikipedia article text could not be retrieved';
+				  let link = result[3] || '#';
 				  wikitext[place.name] = {text,link};
 				}).fail(function(err) {
-				  let error = 'Wikipedia article text could not be retrieved';
+				  let text = 'Wikipedia article text could not be retrieved';
 				  let link = '#';
 				  wikitext[place.name] = {text,link};
-				  throw(err);
+				  let errorText = 'Unable to load Wikipedia, location info unavailable';
+				  $('#errorText').html(errorText);
+				  $('#errorModal').foundation('open');
 				});
 			});
 		}
