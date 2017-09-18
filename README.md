@@ -1,6 +1,6 @@
 # Explore Birmingham Map
 
-** Shows off some sweet places you should visit in Birminham, AL **
+**Showcases places you should visit in Birminham, AL**
 
 Gives info for local points of interest via
 Goolge maps connected to Wikipedia
@@ -10,10 +10,15 @@ _________
 A demo single page application(SPA) that uses
 
 Javascript
+
 Knockout.js
+
 jQuery
+
 Zurb Foundation
+
 Google Maps API & Google Fonts
+
 and the Wikipedia API.
 
 
