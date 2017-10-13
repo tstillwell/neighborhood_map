@@ -106,6 +106,7 @@ var viewModel = {
 				if (marker == selectedMarker) { // highlighted/selected icon 
 					 marker.setIcon('http://maps.google.com/mapfiles/ms/icons/yellow-dot.png');
 					 gmap.setCenter(marker.getPosition());
+					 gmap.panBy(-125, 0);
 					}
 			});
 		},
