@@ -103,9 +103,10 @@ var viewModel = {
 			markers.forEach(function(marker) {
 				if (marker != selectedMarker) // deselected icons
 					{marker.setIcon('http://maps.google.com/mapfiles/ms/icons/blue.png');}
-				if (marker == selectedMarker) // highlighted/selected icon 
-					{marker.setIcon('http://maps.google.com/mapfiles/ms/icons/yellow-dot.png');
-					 gmap.setCenter(marker.getPosition());}
+				if (marker == selectedMarker) { // highlighted/selected icon 
+					 marker.setIcon('http://maps.google.com/mapfiles/ms/icons/yellow-dot.png');
+					 gmap.setCenter(marker.getPosition());
+					}
 			});
 		},
 		populateInfoWindow : function (marker, infowindow) {
