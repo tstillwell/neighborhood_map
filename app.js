@@ -67,6 +67,9 @@ var viewModel = {
 				'stylers': [{'color': '#c2c2c2'}]
 				}]
 			});
+			 $(window).resize(function() {
+			google.maps.event.trigger(gmap, "resize");
+			});
 			let menubtndiv = document.getElementById('menubtn');
 			menubtndiv.style.margin = '1em';
 			gmap.controls[google.maps.ControlPosition.TOP_LEFT].push(menubtndiv);
@@ -101,7 +104,8 @@ var viewModel = {
 				if (marker != selectedMarker) // deselected icons
 					{marker.setIcon('http://maps.google.com/mapfiles/ms/icons/blue.png');}
 				if (marker == selectedMarker) // highlighted/selected icon 
-					{marker.setIcon('http://maps.google.com/mapfiles/ms/icons/yellow-dot.png');}
+					{marker.setIcon('http://maps.google.com/mapfiles/ms/icons/yellow-dot.png');
+					 gmap.setCenter(marker.getPosition());}
 			});
 		},
 		populateInfoWindow : function (marker, infowindow) {
