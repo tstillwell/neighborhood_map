@@ -106,7 +106,6 @@ var viewModel = {
 				if (marker == selectedMarker) { // highlighted/selected icon 
 					 marker.setIcon('http://maps.google.com/mapfiles/ms/icons/yellow-dot.png');
 					 gmap.setCenter(marker.getPosition());
-					 gmap.panBy(-125, 0);
 					}
 			});
 		},
@@ -128,10 +127,10 @@ var viewModel = {
 			self = this;
 			self.markers.forEach(function(marker){
 				if (marker.title == place.name && marker.map !== null){
-					marker.map.panTo(marker.position);
 					self.populateInfoWindow(marker, largeInfowindow);
 					self.highlightSelected(marker);
 				}
+			$('.off-canvas').foundation('close');
 			});
 		},
 		resetFilter : function() {
