@@ -38,77 +38,77 @@ else {
 
 
 var viewModel = {
-		places : allPoints.places, // used by initmap to make markers
-		filteredPlaces : [], // stores places that are being actively filtered
-		displayedPlaces : ko.observableArray(allPoints.places), // for list
-		markers: [], // store markers in this after creation
-		wikitext : {}, // stores wikipedia data for places retrieved via api
-		sidebarTitle : ko.observable('All Attractions'), // dropdown name
-		initMap : function () {
-			/* Initilizes the google map and all markers. Sets up markers and
-			   infowindow behavior inside the map pane.
-			   Used as a callback from Google Maps
-			   API query in index.html */
-			let self = this;
-			largeInfowindow = new google.maps.InfoWindow({
-				maxWidth: 150
-			});
-			let bounds = new google.maps.LatLngBounds();
-			gmap = new google.maps.Map(document.getElementById('map'), {
-				center: {lat: 33.517641, lng: -86.802979},
-				zoom: 15,
-				mapTypeControl: false,
-				styles: 
-				[{ 'featureType': 'poi',
-				'stylers': [{'visibility': 'off'}]
-				},
-				{ 'featureType': 'road',
-				'elementType': 'geometry.fill',
-				'stylers': [{'color': '#c2c2c2'}]
-				}]
-			});
-			 $(window).resize(function() {
-			google.maps.event.trigger(gmap, "resize");
-			});
-			let menubtndiv = document.getElementById('menubtn');
-			menubtndiv.style.margin = '1em';
-			gmap.controls[google.maps.ControlPosition.TOP_LEFT].push(menubtndiv);
-			self.places.forEach(function(place){
-			// create markers from places
-				marker = new google.maps.Marker({
-					position : place.position,
-					map: gmap,
-					animation: google.maps.Animation.DROP,
-					icon: 'https://maps.google.com/mapfiles/ms/icons/blue.png',
-					title: place.name,
-					admissionType : place.admission
-				});
-				bounds.extend(place.position);
-				marker.addListener('click', function() {
-					// marker click listeners to highlight & show infowindow
-					self.populateInfoWindow(this, largeInfowindow);
-					self.highlightSelected(this);
-				});
-				self.markers.push(marker); // populate markers array
-			});
-			gmap.fitBounds(bounds); // ensure map holds all markers
-			self.populateWikiData(); // now map is finished, get wiki data
-		},
-		mapError : function () { // if maps API request fails, notify user
-			$('#map').html("Google Maps failed to load");
-		},	
-		highlightSelected : function (selectedMarker) {
-			// highlight currently selected marker and un-highlight the others
-			markers = this.markers;
-			markers.forEach(function(marker) {
-				if (marker != selectedMarker) // deselected icons
-					{marker.setIcon('http://maps.google.com/mapfiles/ms/icons/blue.png');}
-				if (marker == selectedMarker) { // highlighted/selected icon 
-					 marker.setIcon('http://maps.google.com/mapfiles/ms/icons/yellow-dot.png');
-					 gmap.setCenter(marker.getPosition());
-					}
-			});
-		},
+        places : allPoints.places, // used by initmap to make markers
+        filteredPlaces : [], // stores places that are being actively filtered
+        displayedPlaces : ko.observableArray(allPoints.places), // for list
+        markers: [], // store markers in this after creation
+        wikitext : {}, // stores wikipedia data for places retrieved via api
+        sidebarTitle : ko.observable('All Attractions'), // dropdown name
+        initMap : function () {
+            /* Initilizes the google map and all markers. Sets up markers and
+               infowindow behavior inside the map pane.
+               Used as a callback from Google Maps
+               API query in index.html */
+            let self = this;
+            largeInfowindow = new google.maps.InfoWindow({
+                maxWidth: 150
+            });
+            let bounds = new google.maps.LatLngBounds();
+            gmap = new google.maps.Map(document.getElementById('map'), {
+                center: {lat: 33.517641, lng: -86.802979},
+                zoom: 15,
+                mapTypeControl: false,
+                styles: 
+                [{ 'featureType': 'poi',
+                'stylers': [{'visibility': 'off'}]
+                },
+                { 'featureType': 'road',
+                'elementType': 'geometry.fill',
+                'stylers': [{'color': '#c2c2c2'}]
+                }]
+            });
+            $(window).resize(function() {
+            google.maps.event.trigger(gmap, "resize");
+            });
+            let menubtndiv = document.getElementById('menubtn');
+            menubtndiv.style.margin = '1em';
+            gmap.controls[google.maps.ControlPosition.TOP_LEFT].push(menubtndiv);
+            self.places.forEach(function(place){
+            // create markers from places
+                marker = new google.maps.Marker({
+                    position : place.position,
+                    map: gmap,
+                    animation: google.maps.Animation.DROP,
+                    icon: 'https://maps.google.com/mapfiles/ms/icons/blue.png',
+                    title: place.name,
+                    admissionType : place.admission
+                });
+                bounds.extend(place.position);
+                marker.addListener('click', function() {
+                    // marker click listeners to highlight & show infowindow
+                    self.populateInfoWindow(this, largeInfowindow);
+                    self.highlightSelected(this);
+                });
+                self.markers.push(marker); // populate markers array
+            });
+            gmap.fitBounds(bounds); // ensure map holds all markers
+            self.populateWikiData(); // now map is finished, get wiki data
+        },
+        mapError : function () { // if maps API request fails, notify user
+            $('#map').html("Google Maps failed to load");
+        },
+        highlightSelected : function (selectedMarker) {
+            // highlight currently selected marker and un-highlight the others
+            markers = this.markers;
+            markers.forEach(function(marker) {
+            if (marker != selectedMarker) // deselected icons
+                {marker.setIcon('http://maps.google.com/mapfiles/ms/icons/blue.png');}
+                if (marker == selectedMarker) { // highlighted/selected icon 
+                    marker.setIcon('http://maps.google.com/mapfiles/ms/icons/yellow-dot.png');
+                    gmap.setCenter(marker.getPosition());
+                }
+            });
+        },
 		populateInfoWindow : function (marker, infowindow) {
 			// Put data loaded from wikipedia into infowindow on map
 			if (infowindow.marker != marker) {
