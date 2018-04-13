@@ -109,100 +109,100 @@ var viewModel = {
                 }
             });
         },
-		populateInfoWindow : function (marker, infowindow) {
-			// Put data loaded from wikipedia into infowindow on map
-			if (infowindow.marker != marker) {
-			  infowindow.marker = marker;
-			  title = '<div class="title">' + marker.title + '</div>';
-			  text = '<div class="desc">' + this.wikitext[marker.title].text + '</div>';
-			  text += '<a href="' + this.wikitext[marker.title].link + '">More From Wikipedia</a>';
-			  infowindow.setContent( title + text );
-			  infowindow.open(map, marker);
-			  infowindow.addListener('closeclick', function() {
-				infowindow.marker = null;
-			  });
-			}
+        populateInfoWindow : function (marker, infowindow) {
+            // Put data loaded from wikipedia into infowindow on map
+            if (infowindow.marker != marker) {
+              infowindow.marker = marker;
+              title = '<div class="title">' + marker.title + '</div>';
+              text = '<div class="desc">' + this.wikitext[marker.title].text + '</div>';
+              text += '<a href="' + this.wikitext[marker.title].link + '">More From Wikipedia</a>';
+              infowindow.setContent( title + text );
+              infowindow.open(map, marker);
+              infowindow.addListener('closeclick', function() {
+                infowindow.marker = null;
+              });
+            }
         },
-		selectPlace : function (place) { // called when clicking item in list
-			self = this;
-			self.markers.forEach(function(marker){
-				if (marker.title == place.name && marker.map !== null){
-					self.populateInfoWindow(marker, largeInfowindow);
-					self.highlightSelected(marker);
-				}
-			$('.off-canvas').foundation('close');
-			});
-		},
-		resetFilter : function() {
-		/* combine filteredPlaces and displayedPlaces observable arrays
-		   so places that were removed from the displayedPlaces (by filters)
-		   can be displayed again when a new filter is selected. Then, empty
-		   the filteredPlaces array so a new filter can be applied */
-			for (var i = 0; i < this.filteredPlaces.length; i++) {
-				this.displayedPlaces.push(this.filteredPlaces[i]);
-			}
-			this.filteredPlaces = [];
-		},
-		hideMarkers : function(admissionString){
-			this.markers.forEach(function(marker){ // hide filtered markers
-				marker.setMap(this.gmap);
-				if (marker.admissionType != admissionString){
-					marker.setMap(null); // marker still exists
-				}
-			});
-		},
-		filterFree : function() { // when user clicks 'free' in dropdown
-			this.resetFilter();
-			this.filteredPlaces = this.displayedPlaces.remove(function(place) {
-				return (place.admission != 'free');
-			});
-			this.hideMarkers('free');
-			this.sidebarTitle('Free Attractions');
-		},
-		filterPaid : function() {  // when user clicks 'paid' in dropdown
-			this.resetFilter();
-			this.filteredPlaces = this.displayedPlaces.remove(function(place) {
-				return (place.admission != 'paid');
-			});
-			this.hideMarkers('paid');
-			this.sidebarTitle('Paid Attractions');
-		},
-		filterAll : function() { // when user clicks 'all' in dropdown
-			this.resetFilter();
-			this.sidebarTitle('All Attractions');
-			this.markers.forEach(function(marker){ // show all markers
-				marker.setMap(this.gmap);
-			});
-		},
-		populateWikiData: function() { // retrieve wikipedia text via API
-			wikitext = this.wikitext;
-			this.places.forEach(function(place){
-				let wikiAPIrequest = 'https://en.wikipedia.org/w/api.php?';
-				wikiAPIrequest += $.param({
-				  'action' : 'opensearch',
-				  'search' : place.name,
-				  'limit' : 1,
-				  'format' : 'json'
-				}); // API lookup URL with URL encoded parameters
-				$.ajax({
-				  url: wikiAPIrequest,
-				  method: 'GET',
-				  jsonp: 'callback',
-				  dataType: 'jsonp'
-				}).done(function(result) {
-				  let text = result[2] || 'Wikipedia article text could not be retrieved';
-				  let link = result[3] || '#';
-				  wikitext[place.name] = {text,link};
-				}).fail(function(err) {
-				  let text = 'Wikipedia article text could not be retrieved';
-				  let link = '#';
-				  wikitext[place.name] = {text,link};
-				  let errorText = 'Unable to load Wikipedia, location info unavailable';
-				  $('#errorText').html(errorText);
-				  $('#errorModal').foundation('open');
-				});
-			});
-		}
-	};
+        selectPlace : function (place) { // called when clicking item in list
+            self = this;
+            self.markers.forEach(function(marker){
+                if (marker.title == place.name && marker.map !== null){
+                    self.populateInfoWindow(marker, largeInfowindow);
+                    self.highlightSelected(marker);
+                }
+            $('.off-canvas').foundation('close');
+            });
+        },
+        resetFilter : function() {
+        /* combine filteredPlaces and displayedPlaces observable arrays
+           so places that were removed from the displayedPlaces (by filters)
+           can be displayed again when a new filter is selected. Then, empty
+           the filteredPlaces array so a new filter can be applied */
+            for (var i = 0; i < this.filteredPlaces.length; i++) {
+                this.displayedPlaces.push(this.filteredPlaces[i]);
+            }
+            this.filteredPlaces = [];
+        },
+        hideMarkers : function(admissionString){
+            this.markers.forEach(function(marker){ // hide filtered markers
+                marker.setMap(this.gmap);
+                if (marker.admissionType != admissionString){
+                    marker.setMap(null); // marker still exists
+                }
+            });
+        },
+        filterFree : function() { // when user clicks 'free' in dropdown
+            this.resetFilter();
+            this.filteredPlaces = this.displayedPlaces.remove(function(place) {
+                return (place.admission != 'free');
+            });
+            this.hideMarkers('free');
+            this.sidebarTitle('Free Attractions');
+        },
+        filterPaid : function() {  // when user clicks 'paid' in dropdown
+            this.resetFilter();
+            this.filteredPlaces = this.displayedPlaces.remove(function(place) {
+                return (place.admission != 'paid');
+            });
+            this.hideMarkers('paid');
+            this.sidebarTitle('Paid Attractions');
+        },
+        filterAll : function() { // when user clicks 'all' in dropdown
+            this.resetFilter();
+            this.sidebarTitle('All Attractions');
+            this.markers.forEach(function(marker){ // show all markers
+                marker.setMap(this.gmap);
+            });
+        },
+        populateWikiData: function() { // retrieve wikipedia text via API
+            wikitext = this.wikitext;
+            this.places.forEach(function(place){
+                let wikiAPIrequest = 'https://en.wikipedia.org/w/api.php?';
+                wikiAPIrequest += $.param({
+                  'action' : 'opensearch',
+                  'search' : place.name,
+                  'limit' : 1,
+                  'format' : 'json'
+                }); // API lookup URL with URL encoded parameters
+                $.ajax({
+                  url: wikiAPIrequest,
+                  method: 'GET',
+                  jsonp: 'callback',
+                  dataType: 'jsonp'
+                }).done(function(result) {
+                  let text = result[2] || 'Wikipedia article text could not be retrieved';
+                  let link = result[3] || '#';
+                  wikitext[place.name] = {text,link};
+                }).fail(function(err) {
+                  let text = 'Wikipedia article text could not be retrieved';
+                  let link = '#';
+                  wikitext[place.name] = {text,link};
+                  let errorText = 'Unable to load Wikipedia, location info unavailable';
+                  $('#errorText').html(errorText);
+                  $('#errorModal').foundation('open');
+                });
+            });
+        }
+    };
 $(document).foundation(); // initilize foundation javascript plugins
 ko.applyBindings(viewModel); // connect knockout bindings in html to viewModel
