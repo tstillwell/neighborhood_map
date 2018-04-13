@@ -1,3 +1,7 @@
+// app.js
+// https://github.com/tstillwell/neighborhood_map
+// MIT License
+
 if (localStorage.mapPlaces){
     var allPoints = JSON.parse(localStorage.mapPlaces);
 }
