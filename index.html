@@ -8,44 +8,44 @@
         <link rel="stylesheet" href="style.css" />
         <link href="https://fonts.googleapis.com/css?family=Carter+One" rel="stylesheet">
     </head>
-	<body>
-	<div class="off-canvas position-left reveal-for-medium" id="offCanvasLeft" data-off-canvas data-transition="overlap">
+    <body>
+    <div class="off-canvas position-left reveal-for-medium" id="offCanvasLeft" data-off-canvas data-transition="overlap">
     <!-- Close button -->
     <button class="close-button" aria-label="Close menu" type="button" data-close>
       <span aria-hidden="true">&times;</span>
     </button>
-	<aside class="place-list medium-3 columns" id="list-pane">
-		<h2 class="top-title"> Explore Birmingham </h2>
-		<ul class="filter-bar dropdown menu" id="filter-places" data-toggle="filter-places" data-dropdown-menu>
-			<li class="sidebar-filter"><span data-bind="text: sidebarTitle "></span><span>&#9660;</span>
-			  <ul class="menu">
-				<li data-bind="click: filterFree">Free Attractions</li>
-				<li data-bind="click: filterPaid">Paid Attractions</li>
-				<li data-bind="click: filterAll">All Attractions</li>
-			  </ul>
-			</li>	
-		</ul>
-			<nav>
-				<ul data-bind="foreach: displayedPlaces">
-					<li class="place" data-bind="text: name, click:  $parent.selectPlace($data)"></li>
-				</ul>
-			</nav>
-	</aside>
-	</div>
-	<section class="map-wrapper off-canvas-content" data-off-canvas-content>
-		<div id="menubtn"><button type="button" class="button popover-button" data-toggle="offCanvasLeft">Open Menu</button></div>
-		<div id="map" class="medium-9 columns"></div>
-	</section>
-	<div class="reveal" id="errorModal" data-reveal>
-		<h3 id="errorText"></h3>
-		<button class="close-button" data-close aria-label="Close modal" type="button">
-			<span aria-hidden="true">&times;</span>
-		</button>
-	</div>
-	<script src="knockout-3.4.2.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.4.3/js/foundation.min.js"></script>
-	<script src="app.js"></script>
-	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDYKwwckfeEDGBfC1n_9HP2zFT2Dn27MTw&v=3&callback=viewModel.initMap" onerror="viewModel.mapError()"></script>
-	</body>
+    <aside class="place-list medium-3 columns" id="list-pane">
+        <h2 class="top-title"> Explore Birmingham </h2>
+        <ul class="filter-bar dropdown menu" id="filter-places" data-toggle="filter-places" data-dropdown-menu>
+            <li class="sidebar-filter"><span data-bind="text: sidebarTitle "></span><span>&#9660;</span>
+              <ul class="menu">
+                <li data-bind="click: filterFree">Free Attractions</li>
+                <li data-bind="click: filterPaid">Paid Attractions</li>
+                <li data-bind="click: filterAll">All Attractions</li>
+              </ul>
+            </li>	
+        </ul>
+            <nav>
+                <ul data-bind="foreach: displayedPlaces">
+                    <li class="place" data-bind="text: name, click:  $parent.selectPlace($data)"></li>
+                </ul>
+            </nav>
+    </aside>
+    </div>
+    <section class="map-wrapper off-canvas-content" data-off-canvas-content>
+        <div id="menubtn"><button type="button" class="button popover-button" data-toggle="offCanvasLeft">Open Menu</button></div>
+        <div id="map" class="medium-9 columns"></div>
+    </section>
+    <div class="reveal" id="errorModal" data-reveal>
+        <h3 id="errorText"></h3>
+        <button class="close-button" data-close aria-label="Close modal" type="button">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <script src="knockout-3.4.2.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.4.3/js/foundation.min.js"></script>
+    <script src="app.js"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDYKwwckfeEDGBfC1n_9HP2zFT2Dn27MTw&v=3&callback=viewModel.initMap" onerror="viewModel.mapError()"></script>
+    </body>
 </html>
